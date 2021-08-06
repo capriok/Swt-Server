@@ -1,6 +1,5 @@
 require('dotenv').config();
 import * as express from "express"
-import * as serverless from 'serverless-http'
 import * as cors from 'cors'
 import * as swt from './swt.router'
 import { corsOptions, corsMiddleware } from './cors/cors'
