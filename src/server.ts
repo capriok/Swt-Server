@@ -19,4 +19,3 @@ app.use('/swt', swt.router)
 app.listen(port, () => console.log(`Server running on port ${port}`))
 
 module.exports = app
-module.exports.handler = serverless(app)
