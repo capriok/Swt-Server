@@ -72,10 +72,6 @@ namespace SwtNameSpace {
 			this.plantSchedule = []
 		}
 
-		test() {
-			console.log('Sweetie Engaged');
-		}
-
 		// CALENDER EVENTS
 
 		getCalenderEvents() {
@@ -269,6 +265,10 @@ namespace SwtNameSpace {
 
 	function createCatSchedule(cd: CatDays): Array<CatScheduleDay> {
 		const { lastFoodDay, lastWasteDay } = cd
+
+		// verfiy last food day of food and waste
+		// 	update json storage to today if day is intv after last day
+
 		const Food_Intv = 2
 		const Waste_Intv = 4
 
@@ -298,7 +298,7 @@ namespace SwtNameSpace {
 			}
 		})
 
-		console.log(schedule);
+		// console.log(schedule);
 		return schedule
 
 		function FindDays(last: Date, intv: number): Array<any> {
