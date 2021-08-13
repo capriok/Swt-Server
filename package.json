@@ -13,10 +13,15 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@typegoose/typegoose": "^8.1.1",
     "cors": "^2.8.5",
     "date-fns": "^2.23.0",
     "dotenv": "^8.6.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongodb": "^3.6.11",
+    "mongoose": "^5.13.7",
+    "peer-dependency": "^1.1.0",
+    "typegoose": "^5.9.1"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.12.7",
