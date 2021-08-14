@@ -8,7 +8,6 @@ export const GetStaticTaskList = async (req: Request, res: Response) => {
 	const staticTaskList = await FindDocument(StaticTaskModel, {})
 
 	res.json({ list: staticTaskList })
-
 }
 export const PostStaticTask = async (req: Request, res: Response) => {
 	console.log('Request: Post Static Task')

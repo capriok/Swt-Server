@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as TaskController from '../Controllers/Task-Controller'
+import * as TaskController from '../Controllers/Task'
 
 export default function TaskRouter(router: Router): void {
 	router.route('/tl')

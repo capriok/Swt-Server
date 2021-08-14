@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as PlantController from '../Controllers/Plant-Controller'
+import * as PlantController from '../Controllers/Plant'
 
 export default function PlantRouter(router: Router): void {
 	router.route('/ps')

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { CalenderEventModel } from '../Models/CalenderEvent'
 import { FindDocument, CreateDocument, UpdateDocument, DeleteDocument } from '../Database/Queries'
-import { sortByDate } from '../swt/Sort-Fns'
+import { sortByDate } from '../Functions/Sorters'
 
 export const GetCalenderEventList = async (req: Request, res: Response) => {
 	console.log('Request: Calender Events')

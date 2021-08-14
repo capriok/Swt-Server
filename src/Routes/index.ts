@@ -1,11 +1,11 @@
 import { Router as R } from 'express'
 
-import CalenderEventRouter from './CalenderEvent-Router'
-import GroceryRouter from './Grocery-Router'
-import TaskRouter from './Task-Router'
-import StaticTaskRouter from './StaticTask-Router'
-import CatConfigRouter from './CatConfig-Router'
-import PlantRouter from './Plant-Router'
+import CalenderEventRouter from './CalenderEvent'
+import GroceryRouter from './Grocery'
+import TaskRouter from './Task'
+import StaticTaskRouter from './StaticTask'
+import CatConfigRouter from './CatConfig'
+import PlantRouter from './Plant'
 
 export default function Router(router: R): R {
 	CalenderEventRouter(router)
@@ -15,4 +15,4 @@ export default function Router(router: R): R {
 	CatConfigRouter(router)
 	PlantRouter(router)
 	return router
-};
+}

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as GroceryController from '../Controllers/Grocery-Controller'
+import * as GroceryController from '../Controllers/Grocery'
 
 export default function GroceryRouter(router: Router): void {
 	router.route('/gl')
