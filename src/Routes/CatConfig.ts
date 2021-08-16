@@ -3,7 +3,7 @@ import * as CatConfigController from '../Controllers/CatConfig'
 
 export default function CatConfigRouter(router: Router): void {
 	router.route('/cs')
-		.get(CatConfigController.GetCatConfigSchedule)
+		.get(CatConfigController.GetCatSchedule)
 
 	router.route('/cc')
 		.get(CatConfigController.GetCatConfig)

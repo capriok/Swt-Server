@@ -4,11 +4,6 @@ import { FindDocument, CreateDocument, UpdateDocument, DeleteDocument } from '..
 import { sortByName } from '../Functions/Sorters'
 import * as Scheduler from '../Functions/Scheduler'
 
-(async () => {
-	let plantList = await FindDocument(PlantModel, {})
-	Scheduler.Plants(plantList)
-})()
-
 export const GetPlantSchedule = async (req: Request, res: Response) => {
 	console.log('Request: Plants Schedule')
 
@@ -36,7 +31,6 @@ export const UpdatePlant = async (req: Request, res: Response) => {
 
 	const { plant } = req.body
 	const update = {
-		cycle: plant.cycle,
 		last: plant.last
 	}
 	const plantList = await UpdateDocument(PlantModel, plant.id, update)

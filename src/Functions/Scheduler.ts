@@ -1,9 +1,95 @@
 import { startOfToday, isSameDay, compareAsc, addDays, subDays, differenceInDays } from 'date-fns'
-import { FindDocument, UpdateDocument } from '../Database/Queries'
+import { UpdateDocument } from '../Database/Queries'
 import { CatConfigModel } from '../Models/CatConfig'
 import { PlantModel } from '../Models/Plant'
 
-export async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
+type CatConfig = {
+	id?: string
+	lastFoodDay: string
+	lastWasteDay: string
+}
+type CatScheduleDay = {
+	date: Date
+	is: boolean
+	progress: number
+}
+
+type Plant = {
+	id?: string
+	name: string
+	cycle: number
+	last: string
+}
+type PlantScheduleDay = {
+	date: Date
+	plants: Array<Plant>
+}
+
+export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
+	const catSchedule = {
+		food: await CatFood(cc),
+		waste: await CatWaste(cc)
+	}
+
+	const week = GenerateWeek(startOfToday())
+	const schedule: any = week.map(day => {
+		const foodDayMatch = catSchedule.food.find((d) => isSameDay(d.date, day))
+		const wasteDayMatch = catSchedule.waste.find((d) => isSameDay(d.date, day))
+
+		if (!foodDayMatch || !wasteDayMatch) return
+
+		return {
+			date: day,
+			food: {
+				is: foodDayMatch.is,
+				progress: foodDayMatch.progress
+			},
+			waste: {
+				is: wasteDayMatch.is,
+				progress: wasteDayMatch.progress
+			}
+		}
+	})
+
+	// console.log(schedule);
+	return schedule
+}
+
+export async function Plants(pl: Array<Plant>): Promise<Array<PlantScheduleDay>> {
+	const thisWeek = GenerateWeek(startOfToday())
+
+	pl.forEach(async plant => {
+		let lastWaterDay = new Date(plant.last)
+		const shouldUpdate = LastDayComaprison(lastWaterDay, plant.cycle)
+		if (shouldUpdate) {
+			const nextWaterDay = addDays(lastWaterDay, plant.cycle).toJSON()
+			plant.last = nextWaterDay
+			const doc = { last: nextWaterDay }
+			await UpdateDocument(PlantModel, plant.id, doc)
+		}
+	})
+
+	const schedule: any = thisWeek.map(day => {
+		const plants = new Array()
+		pl.forEach(plant => {
+			const lastWaterDay = new Date(plant.last)
+			const nextWaterDay = addDays(lastWaterDay, plant.cycle)
+			if (isSameDay(day, nextWaterDay)) {
+				plants.push(plant)
+			}
+		})
+
+		return {
+			date: day,
+			plants: plants
+		}
+	})
+
+	// console.log(schedule);
+	return schedule
+}
+
+async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	const Interval = 2
 
 	let lastFoodDay = new Date(cd.lastFoodDay)
@@ -13,7 +99,8 @@ export async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 		const nextDay = addDays(lastFoodDay, Interval)
 		lastFoodDay = nextDay
 		const doc = { lastFoodDay: nextDay.toJSON() }
-		await UpdateDocument(CatConfigModel, '6118113fa75dc53ee49558d2', doc)
+		console.log('Updating CatConfigModel Lfd');
+		await UpdateDocument(CatConfigModel, '6119628c4d3b6b515097dea6', doc)
 	}
 
 	const foodDays = MapDays(lastFoodDay, Interval)
@@ -22,7 +109,7 @@ export async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	return foodDays
 }
 
-export async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
+async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	const Interval = 4
 
 	let lastWasteDay = new Date(cd.lastWasteDay)
@@ -32,7 +119,8 @@ export async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 		const nextDay = addDays(lastWasteDay, Interval)
 		lastWasteDay = nextDay
 		const doc = { lastWasteDay: nextDay.toJSON() }
-		await UpdateDocument(CatConfigModel, '6118113fa75dc53ee49558d2', doc)
+		console.log('Updating CatConfigModel Lwd');
+		await UpdateDocument(CatConfigModel, '6119628c4d3b6b515097dea6', doc)
 	}
 
 	const wasteDays = MapDays(lastWasteDay, Interval)
@@ -41,7 +129,20 @@ export async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	return wasteDays
 }
 
-const LastDayComaprison = (last, intv) => {
+
+function GenerateWeek(s: Date) {
+	let week = new Array()
+	Populate(s, 1)
+	return week
+
+	function Populate(s, n) {
+		if (n > 7) return
+		week.push(s)
+		Populate(addDays(s, 1), n + 1)
+	}
+}
+
+function LastDayComaprison(last, intv) {
 	const difInDays = Math.abs(differenceInDays(last, startOfToday()))
 	return difInDays >= intv
 		? true
@@ -82,78 +183,4 @@ function MapDays(last: Date, intv: number): Array<any> {
 		days.push(day)
 		FindDays(addDays(l, 1), temp, n - 1)
 	}
-}
-
-export async function Plants(pl: Array<Plant>): Promise<Array<PlantScheduleDay>> {
-	const today = startOfToday()
-	const thisWeek = generateWeek(today)
-
-	pl.forEach(async plant => {
-		let lastWaterDay = new Date(plant.last)
-		const shouldUpdate = LastDayComaprison(lastWaterDay, plant.cycle)
-		if (shouldUpdate) {
-			const nextWaterDay = addDays(lastWaterDay, plant.cycle).toJSON()
-			plant.last = nextWaterDay
-			const doc = { last: nextWaterDay }
-			await UpdateDocument(PlantModel, plant.id, doc)
-		}
-	})
-
-	const schedule: any = thisWeek.map(day => {
-		const plants = new Array()
-		pl.forEach(plant => {
-			const lastWaterDay = new Date(plant.last)
-			const nextWaterDay = addDays(lastWaterDay, plant.cycle)
-			if (isSameDay(day, nextWaterDay)) {
-				plants.push(plant)
-			}
-		})
-
-		return {
-			date: day,
-			plants: plants
-		}
-	})
-	console.log(schedule);
-	return schedule
-}
-
-function generateWeek(s: Date) {
-	let week = new Array()
-	Populate(subDays(s, 3), 1)
-	return week
-
-	function Populate(s, n) {
-		if (n > 7) return
-		week.push(s)
-		Populate(addDays(s, 1), n + 1)
-	}
-}
-
-
-
-type CatConfig = {
-	lastFoodDay: string
-	lastWasteDay: string
-}
-type CatScheduleDay = {
-	date: Date
-	food: {
-		is: boolean
-		progress: number
-	}
-	waste: {
-		is: boolean
-		progress: number
-	}
-}
-type Plant = {
-	id: string
-	name: string
-	cycle: number
-	last: string
-}
-type PlantScheduleDay = {
-	date: Date
-	plants: Array<Plant>
 }

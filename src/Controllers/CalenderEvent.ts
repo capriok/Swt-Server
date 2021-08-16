@@ -14,6 +14,7 @@ export const PostCalenderEvent = async (req: Request, res: Response) => {
 	console.log('Request: Post Calender Event')
 
 	const { event } = req.body
+	console.log(event);
 	const calenderEventList = await CreateDocument(CalenderEventModel, event)
 
 	res.json({ list: sortByDate(calenderEventList) })
@@ -26,6 +27,8 @@ export const UpdateCalenderEvent = async (req: Request, res: Response) => {
 		date: event.date,
 		timed: event.timed
 	}
+	console.log(event);
+
 	const calenderEventList = await UpdateDocument(CalenderEventModel, event.id, update)
 
 	res.json({ list: sortByDate(calenderEventList) })
