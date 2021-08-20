@@ -9,6 +9,7 @@ export const GetCatSchedule = async (req: Request, res: Response) => {
 
 	const catConfig = await FindDocument(CatConfigModel, {}).then(res => { return res[0] })
 	const catSchedule = await Scheduler.Cats(catConfig)
+	console.log(catSchedule);
 
 	res.json({ schedule: catSchedule })
 }
