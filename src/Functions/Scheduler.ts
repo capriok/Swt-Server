@@ -147,7 +147,9 @@ function GenerateWeek() {
 }
 
 function LastDayComaprison(last, intv) {
-	const difInDays = Math.abs(differenceInDays(last, startOfToday()))
+	const date = startOfToday()
+	date.setUTCHours(7)
+	const difInDays = Math.abs(differenceInDays(last, date))
 	return difInDays >= intv
 		? true
 		: false
