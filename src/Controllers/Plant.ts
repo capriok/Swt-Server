@@ -22,6 +22,7 @@ export const PostPlant = async (req: Request, res: Response) => {
 	console.log('Request: Post Plant')
 
 	const { plant } = req.body
+	console.log(plant)
 	const plantList = await CreateDocument(PlantModel, plant)
 
 	res.json({ list: sortByName(plantList) })
@@ -30,6 +31,7 @@ export const UpdatePlant = async (req: Request, res: Response) => {
 	console.log('Request: Update Plant')
 
 	const { plant } = req.body
+	console.log(plant)
 	const update = {
 		last: plant.last
 	}

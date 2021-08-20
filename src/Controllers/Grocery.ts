@@ -13,6 +13,7 @@ export const PostGrocery = async (req: Request, res: Response) => {
 	console.log('Request: Post Grocery')
 
 	const { item } = req.body
+	console.log(item)
 	const groceryList = await CreateDocument(GroceryModel, item)
 
 	res.json({ list: groceryList })

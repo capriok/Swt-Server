@@ -26,6 +26,7 @@ export const UpdateCatConfig = async (req: Request, res: Response) => {
 	console.log('Request: Update Cat Config')
 
 	const { config } = req.body
+	console.log(config)
 	const catConfig = await UpdateDocument(CatConfigModel, '6119628c4d3b6b515097dea6', config)
 
 	res.json({ config: catConfig[0] })

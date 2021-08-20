@@ -31,7 +31,8 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 		waste: await CatWaste(cc)
 	}
 
-	const week = GenerateWeek(startOfToday())
+	const week = GenerateWeek()
+
 	const schedule: any = week.map(day => {
 		const foodDayMatch = catSchedule.food.find((d) => isSameDay(d.date, day))
 		const wasteDayMatch = catSchedule.waste.find((d) => isSameDay(d.date, day))
@@ -56,7 +57,7 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 }
 
 export async function Plants(pl: Array<Plant>): Promise<Array<PlantScheduleDay>> {
-	const thisWeek = GenerateWeek(startOfToday())
+	const thisWeek = GenerateWeek()
 
 	pl.forEach(async plant => {
 		let lastWaterDay = new Date(plant.last)
@@ -130,9 +131,11 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 }
 
 
-function GenerateWeek(s: Date) {
+function GenerateWeek() {
+	const date = startOfToday().setUTCHours(7)
 	let week = new Array()
-	Populate(s, 1)
+
+	Populate(date, 1)
 	return week
 
 	function Populate(s, n) {
