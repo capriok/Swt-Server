@@ -52,7 +52,7 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 		}
 	})
 
-	// console.log(schedule);
+	console.log(schedule);
 	return schedule
 }
 
@@ -86,7 +86,7 @@ export async function Plants(pl: Array<Plant>): Promise<Array<PlantScheduleDay>>
 		}
 	})
 
-	// console.log(schedule);
+	console.log(schedule);
 	return schedule
 }
 
