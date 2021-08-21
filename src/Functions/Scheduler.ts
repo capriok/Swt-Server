@@ -133,12 +133,10 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 
 function GenerateWeek() {
 	let date = startOfToday()
-	date.setUTCHours(7)
 	let week = new Array()
 
-	console.log(date);
-	console.log();
 	date = new Date(Date.parse(date.toLocaleString('en-us', { timeZone: 'America/Phoenix' })))
+	date.setUTCHours(7)
 
 	Populate(date, 1)
 	return week
