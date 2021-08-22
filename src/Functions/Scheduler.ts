@@ -25,9 +25,12 @@ type PlantScheduleDay = {
 	plants: Array<Plant>
 }
 
-const SERVER_DATE = process.env.NODE_ENV === 'production' ? subDays(startOfToday(), 1) : startOfToday()
-SERVER_DATE.setMinutes(SERVER_DATE.getMinutes() - SERVER_DATE.getTimezoneOffset())
-console.log(SERVER_DATE);
+const isProd = process.env.NODE_ENV === 'production'
+const isUTCNextDay = new Date().getHours() >= 17
+
+const ServerDate = isProd && isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
+ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
+console.log(ServerDate);
 
 export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 	const catSchedule = {
@@ -136,7 +139,7 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 function GenerateWeek() {
 	let week = new Array()
 
-	Populate(SERVER_DATE, 1)
+	Populate(ServerDate, 1)
 	console.log(week);
 	return week
 
@@ -148,7 +151,7 @@ function GenerateWeek() {
 }
 
 function LastDayComaprison(last, intv) {
-	const difInDays = Math.abs(differenceInDays(last, SERVER_DATE))
+	const difInDays = Math.abs(differenceInDays(last, ServerDate))
 	return difInDays >= intv
 		? true
 		: false
