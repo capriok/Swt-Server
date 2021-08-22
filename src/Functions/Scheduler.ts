@@ -27,11 +27,7 @@ type PlantScheduleDay = {
 
 const isProd = process.env.NODE_ENV === 'production'
 const isUTCNextDay = new Date().getHours() >= 17
-console.log(new Date())
-console.log(new Date().getHours())
-console.log(isUTCNextDay)
-
-const ServerDate = isProd && isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
+const ServerDate = isProd && !isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
 ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
 console.log(ServerDate);
 
