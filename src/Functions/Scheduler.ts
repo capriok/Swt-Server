@@ -25,6 +25,9 @@ type PlantScheduleDay = {
 	plants: Array<Plant>
 }
 
+const SERVER_DATE = process.env.NODE_ENV === 'production' ? subDays(startOfToday(), 1) : startOfToday()
+SERVER_DATE.setMinutes(SERVER_DATE.getMinutes() - SERVER_DATE.getTimezoneOffset())
+
 export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 	const catSchedule = {
 		food: await CatFood(cc),
@@ -99,7 +102,7 @@ async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 		const nextDay = addDays(lastFoodDay, Interval)
 		lastFoodDay = nextDay
 		const doc = { lastFoodDay: nextDay.toJSON() }
-		console.log('Updating CatConfigModel Lfd');
+		console.log('Updating CatConfigModel Lfd --------------------------');
 		await UpdateDocument(CatConfigModel, '6119628c4d3b6b515097dea6', doc)
 	}
 
@@ -119,7 +122,7 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 		const nextDay = addDays(lastWasteDay, Interval)
 		lastWasteDay = nextDay
 		const doc = { lastWasteDay: nextDay.toJSON() }
-		console.log('Updating CatConfigModel Lwd');
+		console.log('Updating CatConfigModel Lwd --------------------------');
 		await UpdateDocument(CatConfigModel, '6119628c4d3b6b515097dea6', doc)
 	}
 
@@ -130,11 +133,9 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 }
 
 function GenerateWeek() {
-	let date = startOfToday()
-	date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
 	let week = new Array()
 
-	Populate(date, 1)
+	Populate(SERVER_DATE, 1)
 	return week
 
 	function Populate(s, n) {
@@ -145,10 +146,7 @@ function GenerateWeek() {
 }
 
 function LastDayComaprison(last, intv) {
-	const date = startOfToday()
-	date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
-
-	const difInDays = Math.abs(differenceInDays(last, date))
+	const difInDays = Math.abs(differenceInDays(last, SERVER_DATE))
 	return difInDays >= intv
 		? true
 		: false
