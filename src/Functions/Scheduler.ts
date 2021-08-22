@@ -137,6 +137,7 @@ function GenerateWeek() {
 	let week = new Array()
 
 	Populate(SERVER_DATE, 1)
+	console.log(week);
 	return week
 
 	function Populate(s, n) {
