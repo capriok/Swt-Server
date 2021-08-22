@@ -27,6 +27,7 @@ type PlantScheduleDay = {
 
 const SERVER_DATE = process.env.NODE_ENV === 'production' ? subDays(startOfToday(), 1) : startOfToday()
 SERVER_DATE.setMinutes(SERVER_DATE.getMinutes() - SERVER_DATE.getTimezoneOffset())
+console.log(SERVER_DATE);
 
 export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 	const catSchedule = {
