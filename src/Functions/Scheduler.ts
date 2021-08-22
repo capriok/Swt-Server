@@ -30,7 +30,6 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 		food: await CatFood(cc),
 		waste: await CatWaste(cc)
 	}
-
 	const week = GenerateWeek()
 
 	const schedule: any = week.map(day => {
@@ -130,13 +129,10 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	return wasteDays
 }
 
-
 function GenerateWeek() {
 	let date = startOfToday()
+	date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
 	let week = new Array()
-
-	date = new Date(Date.parse(date.toLocaleString('en-us', { timeZone: 'America/Phoenix' })))
-	date.setUTCHours(7)
 
 	Populate(date, 1)
 	return week
@@ -150,7 +146,8 @@ function GenerateWeek() {
 
 function LastDayComaprison(last, intv) {
 	const date = startOfToday()
-	date.setUTCHours(7)
+	date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+
 	const difInDays = Math.abs(differenceInDays(last, date))
 	return difInDays >= intv
 		? true
