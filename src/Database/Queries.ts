@@ -1,4 +1,3 @@
-import { ReturnModelType } from '@typegoose/typegoose'
 export async function FindDocument(model, query): Promise<Array<typeof model>> {
 	return await model.find(query)
 }

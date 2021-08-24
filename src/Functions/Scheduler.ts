@@ -27,8 +27,9 @@ type PlantScheduleDay = {
 
 const isProd = process.env.NODE_ENV === 'production'
 const isUTCNextDay = new Date().getHours() >= 17
-const ServerDate = isProd && !isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
+export const ServerDate = isProd && !isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
 ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
+
 console.log(ServerDate);
 
 export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
@@ -139,7 +140,6 @@ function GenerateWeek() {
 	let week = new Array()
 
 	Populate(ServerDate, 1)
-	console.log(week);
 	return week
 
 	function Populate(s, n) {

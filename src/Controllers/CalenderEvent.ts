@@ -2,13 +2,22 @@ import { Request, Response } from 'express'
 import { CalenderEventModel } from '../Models/CalenderEvent'
 import { FindDocument, CreateDocument, UpdateDocument, DeleteDocument } from '../Database/Queries'
 import { sortByDate } from '../Functions/Sorters'
+import { ServerDate } from '../Functions/Scheduler'
+import { isAfter } from 'date-fns'
 
 export const GetCalenderEventList = async (req: Request, res: Response) => {
 	console.log('Request: Calender Events')
 
 	const calenderEvents = await FindDocument(CalenderEventModel, {})
+	calenderEvents.filter(ce => {
+		if (isAfter(new Date(ServerDate), new Date(ce.date))) {
+			console.log('Deleting Past Calender Event');
+			DeleteDocument(CalenderEventModel, ce.id)
+		}
+	})
+	const filteredPastCalenderEvents = calenderEvents
 
-	res.json({ list: (sortByDate(calenderEvents)) })
+	res.json({ list: (sortByDate(filteredPastCalenderEvents)) })
 }
 export const PostCalenderEvent = async (req: Request, res: Response) => {
 	console.log('Request: Post Calender Event')
