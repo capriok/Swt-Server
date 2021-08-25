@@ -58,7 +58,7 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 		}
 	})
 
-	console.log(schedule);
+	// console.log(schedule);
 	return schedule
 }
 
@@ -81,7 +81,7 @@ export async function Plants(pl: Array<Plant>): Promise<Array<PlantScheduleDay>>
 		pl.forEach(plant => {
 			const lastWaterDay = new Date(plant.last)
 			const nextWaterDay = addDays(lastWaterDay, plant.cycle)
-			if (isSameDay(day, nextWaterDay)) {
+			if (isSameDay(day, lastWaterDay) || isSameDay(day, nextWaterDay)) {
 				plants.push(plant)
 			}
 		})
