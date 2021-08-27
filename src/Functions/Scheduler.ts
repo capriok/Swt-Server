@@ -1,4 +1,4 @@
-import { startOfToday, isSameDay, compareAsc, addDays, subDays, differenceInDays } from 'date-fns'
+import { startOfToday, isSameDay, compareAsc, addDays, subDays, differenceInDays, } from 'date-fns'
 import { UpdateDocument } from '../Database/Queries'
 import { CatConfigModel } from '../Models/CatConfig'
 import { PlantModel } from '../Models/Plant'
@@ -26,8 +26,11 @@ type PlantScheduleDay = {
 }
 
 const isProd = process.env.NODE_ENV === 'production'
-const isUTCNextDay = new Date().getHours() >= 17
-export const ServerDate = isProd && !isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
+const hr = new Date().getHours()
+const isUTCNextDay = hr >= 0 && hr <= 7
+console.log(hr, isUTCNextDay);
+
+export const ServerDate = isProd && isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
 ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
 
 console.log(ServerDate);
