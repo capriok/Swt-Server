@@ -18,7 +18,7 @@ export const GetCatConfig = async (req: Request, res: Response) => {
 
 	const catConfig = await FindDocument(CatConfigModel, {})
 
-	res.json({ days: catConfig[0] })
+	res.json({ config: catConfig[0] })
 }
 
 export const UpdateCatConfig = async (req: Request, res: Response) => {

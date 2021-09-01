@@ -34,8 +34,10 @@ export const UpdateCalenderEvent = async (req: Request, res: Response) => {
 	const { event } = req.body
 	console.log(event)
 	const update = {
+		timed: event.timed,
 		date: event.date,
-		timed: event.timed
+		startTime: event.startTime,
+		endTime: event.endTime
 	}
 
 	const calenderEventList = await UpdateDocument(CalenderEventModel, event.id, update)

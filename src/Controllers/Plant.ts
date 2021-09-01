@@ -33,6 +33,7 @@ export const UpdatePlant = async (req: Request, res: Response) => {
 	const { plant } = req.body
 	console.log(plant)
 	const update = {
+		cycle: plant.cycle,
 		last: plant.last
 	}
 	const plantList = await UpdateDocument(PlantModel, plant.id, update)
