@@ -42,11 +42,7 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 
 	const schedule: any = week.map(day => {
 		const foodDayMatch = catSchedule.food.find((d) => isSameDay(d.date, day))
-		console.log(foodDayMatch);
-
 		const wasteDayMatch = catSchedule.waste.find((d) => isSameDay(d.date, day))
-		console.log(wasteDayMatch);
-
 
 		if (!foodDayMatch || !wasteDayMatch) return
 
