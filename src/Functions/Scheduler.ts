@@ -112,8 +112,8 @@ async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	}
 
 	const foodDays = MapDays(lastFoodDay, Interval)
-	// console.log(foodDays);
 
+	// console.log(foodDays);
 	return foodDays
 }
 
