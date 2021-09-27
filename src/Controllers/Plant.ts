@@ -9,6 +9,7 @@ export const GetPlantSchedule = async (req: Request, res: Response) => {
 
 	const plantList = await FindDocument(PlantModel, {})
 	const plantSchedule = await Scheduler.Plants(plantList)
+
 	res.json({ schedule: plantSchedule })
 }
 
@@ -16,6 +17,7 @@ export const GetPlantList = async (req: Request, res: Response) => {
 	console.log('Request: Plant List')
 
 	const plantList = await FindDocument(PlantModel, {})
+
 	res.json({ list: sortByName(plantList) })
 }
 export const PostPlant = async (req: Request, res: Response) => {
