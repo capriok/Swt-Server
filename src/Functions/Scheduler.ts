@@ -118,7 +118,7 @@ async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 }
 
 async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
-	const Interval = 4
+	const Interval = 3
 
 	let lastWasteDay = new Date(cd.lastWasteDay)
 	const shouldUpdate = LastDayComaprison(lastWasteDay, Interval)
