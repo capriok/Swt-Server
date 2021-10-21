@@ -1,7 +1,6 @@
-import { startOfToday, isSameDay, compareAsc, addDays, subDays, differenceInDays, } from 'date-fns'
+import { startOfToday, isSameDay, compareAsc, addDays, subDays, differenceInDays } from 'date-fns'
 import { UpdateDocument } from '../Database/Queries'
 import { CatConfigModel } from '../Models/CatConfig'
-import { PlantModel } from '../Models/Plant'
 
 type CatConfig = {
 	id?: string
@@ -12,17 +11,6 @@ type CatScheduleDay = {
 	date: Date
 	is: boolean
 	progress: number
-}
-
-type Plant = {
-	id?: string
-	name: string
-	cycle: number
-	last: string
-}
-type PlantScheduleDay = {
-	date: Date
-	plants: Array<Plant>
 }
 
 const isProd = process.env.NODE_ENV === 'production'
@@ -56,40 +44,6 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 				is: wasteDayMatch.is,
 				progress: wasteDayMatch.progress
 			}
-		}
-	})
-
-	console.log(schedule);
-	return schedule
-}
-
-export async function Plants(pl: Array<Plant>): Promise<Array<PlantScheduleDay>> {
-	const thisWeek = GenerateWeek()
-
-	pl.forEach(async plant => {
-		let lastWaterDay = new Date(plant.last)
-		const shouldUpdate = LastDayComaprison(lastWaterDay, plant.cycle)
-		if (shouldUpdate) {
-			const nextWaterDay = addDays(lastWaterDay, plant.cycle).toJSON()
-			plant.last = nextWaterDay
-			const doc = { last: nextWaterDay }
-			await UpdateDocument(PlantModel, plant.id, doc)
-		}
-	})
-
-	const schedule: any = thisWeek.map(day => {
-		const plants = new Array()
-		pl.forEach(plant => {
-			const lastWaterDay = new Date(plant.last)
-			const nextWaterDay = addDays(lastWaterDay, plant.cycle)
-			if (isSameDay(day, lastWaterDay) || isSameDay(day, nextWaterDay)) {
-				plants.push(plant)
-			}
-		})
-
-		return {
-			date: day,
-			plants: plants
 		}
 	})
 
@@ -132,8 +86,8 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	}
 
 	const wasteDays = MapDays(lastWasteDay, Interval)
-	// console.log(wasteDays);
 
+	// console.log(wasteDays);
 	return wasteDays
 }
 
