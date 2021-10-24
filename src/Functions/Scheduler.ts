@@ -47,7 +47,7 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 		}
 	})
 
-	// console.log(schedule);
+	console.log(schedule);
 	return schedule
 }
 
