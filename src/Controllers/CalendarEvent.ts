@@ -15,8 +15,6 @@ export const GetCalendarEventList = async (req: Request, res: Response) => {
 		if (isBefore(new Date(new Date(d.getFullYear(), d.getMonth(), 1)), new Date(ce.date))) eventsAfterFirstOfMonth.push(ce)
 	})
 
-	console.log(eventsAfterFirstOfMonth);
-
 	res.json({ list: (sortByDate(eventsAfterFirstOfMonth)) })
 }
 export const PostCalendarEvent = async (req: Request, res: Response) => {
