@@ -2,18 +2,23 @@ import { Request, Response } from 'express'
 import { CalendarEventModel } from '../Models/CalendarEvent'
 import { FindDocument, CreateDocument, UpdateDocument, DeleteDocument } from '../Database/Queries'
 import { sortByDate } from '../Functions/Sorters'
-import { isBefore } from 'date-fns'
+import { isAfter } from 'date-fns'
+
+function filterEventsBeforeFirstOfMonth(ces) {
+	return ces.filter(ce => {
+		const dateAfterFirstOfMonth = isAfter(
+			new Date(ce.date),
+			new Date(new Date(new Date().getFullYear(), new Date().getMonth(), 0))
+		)
+		return dateAfterFirstOfMonth && ce
+	})
+}
 
 export const GetCalendarEventList = async (req: Request, res: Response) => {
-	console.log('Request: Calendar Events')
+	console.log('Request: Calendar Event List')
 
-	const calendarEvents = await FindDocument(CalendarEventModel, {})
-	const d = new Date()
-	const eventsAfterFirstOfMonth = []
-
-	calendarEvents.forEach(ce => {
-		if (isBefore(new Date(new Date(d.getFullYear(), d.getMonth(), 1)), new Date(ce.date))) eventsAfterFirstOfMonth.push(ce)
-	})
+	const calendarEventList = await FindDocument(CalendarEventModel, {})
+	const eventsAfterFirstOfMonth = filterEventsBeforeFirstOfMonth(calendarEventList)
 
 	res.json({ list: (sortByDate(eventsAfterFirstOfMonth)) })
 }
@@ -23,8 +28,9 @@ export const PostCalendarEvent = async (req: Request, res: Response) => {
 	const { event } = req.body
 	console.log(event)
 	const calendarEventList = await CreateDocument(CalendarEventModel, event)
+	const eventsAfterFirstOfMonth = filterEventsBeforeFirstOfMonth(calendarEventList)
 
-	res.json({ list: sortByDate(calendarEventList) })
+	res.json({ list: sortByDate(eventsAfterFirstOfMonth) })
 }
 export const UpdateCalendarEvent = async (req: Request, res: Response) => {
 	console.log('Request: Update Calendar Event')
@@ -40,14 +46,16 @@ export const UpdateCalendarEvent = async (req: Request, res: Response) => {
 	}
 
 	const calendarEventList = await UpdateDocument(CalendarEventModel, event.id, update)
+	const eventsAfterFirstOfMonth = filterEventsBeforeFirstOfMonth(calendarEventList)
 
-	res.json({ list: sortByDate(calendarEventList) })
+	res.json({ list: sortByDate(eventsAfterFirstOfMonth) })
 }
 export const DeleteCalendarEvent = async (req: Request, res: Response) => {
 	console.log('Request: Delete Calendar Event')
 
 	const { id } = req.body
 	const calendarEventList = await DeleteDocument(CalendarEventModel, id)
+	const eventsAfterFirstOfMonth = filterEventsBeforeFirstOfMonth(calendarEventList)
 
-	res.json({ list: sortByDate(calendarEventList) })
+	res.json({ list: sortByDate(eventsAfterFirstOfMonth) })
 }

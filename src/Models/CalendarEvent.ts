@@ -1,4 +1,4 @@
-import { prop, getModelForClass, DocumentType } from '@typegoose/typegoose';
+import { prop, getModelForClass } from '@typegoose/typegoose';
 class CalenderEvent {
 	@prop({ type: String, required: true })
 	public name!: string;
