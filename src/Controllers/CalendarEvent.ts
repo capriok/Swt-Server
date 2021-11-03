@@ -6,11 +6,10 @@ import { isAfter } from 'date-fns'
 
 function filterEventsBeforeFirstOfMonth(ces) {
 	return ces.filter(ce => {
-		const dateAfterFirstOfMonth = isAfter(
+		return isAfter(
 			new Date(ce.date),
 			new Date(new Date(new Date().getFullYear(), new Date().getMonth(), 0))
-		)
-		return dateAfterFirstOfMonth && ce
+		) && ce
 	})
 }
 
