@@ -12,14 +12,15 @@ type CatScheduleDay = {
 	is: boolean
 	progress: number
 }
-
-const isProd = process.env.NODE_ENV === 'production'
 const hr = new Date().getHours()
-const isUTCNextDay = hr >= 0 && hr <= 7
-export const ServerDate = isProd && isUTCNextDay ? subDays(startOfToday(), 1) : startOfToday()
+export let ServerDate: Date
+if (process.env.NODE_ENV === 'production' || hr >= 0 && hr <= 7) {
+	ServerDate = subDays(startOfToday(), 1)
+} else {
+	ServerDate = startOfToday()
+}
 ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
-
-console.log(ServerDate);
+console.log('ServerDate', ServerDate);
 
 export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 	const catSchedule = {
