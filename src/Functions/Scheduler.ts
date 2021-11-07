@@ -22,6 +22,9 @@ if (process.env.NODE_ENV === 'production' || hr >= 0 && hr <= 7) {
 ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
 console.log('ServerDate', ServerDate);
 
+console.log('NewDate', new Date().toJSON());
+console.log('TZ', new Date().getTimezoneOffset());
+
 export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 	const catSchedule = {
 		food: await CatFood(cc),
