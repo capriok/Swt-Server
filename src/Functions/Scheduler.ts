@@ -14,7 +14,7 @@ type CatScheduleDay = {
 }
 export const ServerDate: Date = startOfToday()
 ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
-console.log('ServerDate', ServerDate);
+console.log('ServerDate:', ServerDate);
 
 export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 	const catSchedule = {
