@@ -11,7 +11,7 @@ const port = process.env.PORT || 9000
 
 app.use(express.json())
 
-const origins = ['192.168.0.233:3000', 'http://localhost:3000', process.env.SWEETIE, undefined]
+const origins = ['http://192.168.0.233:3000', 'http://localhost:3000', process.env.SWEETIE, '*']
 app.use(cors(corsOptions(origins)), corsMiddleware)
 
 const router = express.Router()
