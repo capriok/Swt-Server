@@ -8,7 +8,7 @@ class Grocery {
 	public qty!: number;
 
 	@prop({ type: String, required: true })
-	public store!: string;
+	public type!: string;
 }
 
 export const GroceryModel = getModelForClass(Grocery);
