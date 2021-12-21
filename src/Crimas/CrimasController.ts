@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { FindDocument, UpdateDocument } from '../Database/Queries'
-import { CrimasMessageModel } from '../Models/CrimasMessage'
+import { CrimasMessageModel } from './CrimasModel'
 
 export const GetCrimasMessage = async (req: Request, res: Response) => {
 	console.log('Request: Crimas Message')
