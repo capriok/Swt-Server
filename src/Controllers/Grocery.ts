@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { GroceryModel } from '../Models/Grocery'
 import { FindDocument, CreateDocument, DeleteDocument, ClearDocuments } from '../Database/Queries'
-import { sortByName } from '../Functions/Sorters'
+import { sortByName } from '../Functions/Data'
 
 export const GetGroceryList = async (req: Request, res: Response) => {
 	console.log('Request: Grocery List')

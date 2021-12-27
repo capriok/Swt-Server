@@ -3,6 +3,7 @@ import { CatConfigModel } from '../Models/CatConfig'
 import { FindDocument, UpdateDocument } from '../Database/Queries'
 
 import * as Scheduler from '../Functions/Scheduler'
+import { findToday } from '../Functions/Data'
 
 export const GetCatSchedule = async (req: Request, res: Response) => {
 	console.log('Request: Cats Schedule')
@@ -10,7 +11,7 @@ export const GetCatSchedule = async (req: Request, res: Response) => {
 	const catConfig = await FindDocument(CatConfigModel, {}).then(res => { return res[0] })
 	const catSchedule = await Scheduler.Cats(catConfig)
 
-	res.json({ schedule: catSchedule })
+	res.json({ today: findToday(catSchedule) })
 }
 
 export const GetCatConfig = async (req: Request, res: Response) => {
