@@ -1,4 +1,4 @@
-import { compareAsc, isAfter, startOfToday } from 'date-fns'
+import { compareAsc, startOfToday } from 'date-fns'
 import { tzDate, tzZero } from './Time'
 
 export function sortByName(pl: Array<any>) {
@@ -22,14 +22,14 @@ export function formatDates(arr: Array<any>) {
 	})
 }
 
-export function eventListFilterSort(ces) {
-	const events = ces.filter(ce => {
-		return isAfter(
-			new Date(ce.date),
-			new Date(new Date(new Date().getFullYear(), new Date().getMonth(), 0))
-		) && ce
+export function eventListFilterFormatSort(events) {
+	const filteredEvents = events.filter(ce => {
+		const eventDate = new Date(ce.date).getTime()
+		const lastDayofLastMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 0).getTime()
+
+		return eventDate > lastDayofLastMonth && ce
 	})
-	const formattedDates = formatDates(events)
+	const formattedDates = formatDates(filteredEvents)
 	const sortedEvents = sortByDate(formattedDates)
 
 	return sortedEvents

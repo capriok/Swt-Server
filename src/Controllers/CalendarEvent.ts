@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import { CalendarEventModel } from '../Models/CalendarEvent'
 import { FindDocument, CreateDocument, UpdateDocument, DeleteDocument } from '../Database/Queries'
-import { eventListFilterSort } from '../Functions/Data'
+import { eventListFilterFormatSort } from '../Functions/Data'
 
 export const GetCalendarEventList = async (req: Request, res: Response) => {
 	console.log('Request: Calendar Event List')
 
 	const calendarEventList = await FindDocument(CalendarEventModel, {})
-	const events = eventListFilterSort(calendarEventList)
+	const events = eventListFilterFormatSort(calendarEventList)
 
 	res.json({ list: events })
 }
@@ -17,7 +17,7 @@ export const PostCalendarEvent = async (req: Request, res: Response) => {
 	const { event } = req.body
 	console.log(event)
 	const calendarEventList = await CreateDocument(CalendarEventModel, event)
-	const events = eventListFilterSort(calendarEventList)
+	const events = eventListFilterFormatSort(calendarEventList)
 
 	res.json({ list: events })
 }
@@ -35,7 +35,7 @@ export const UpdateCalendarEvent = async (req: Request, res: Response) => {
 	}
 
 	const calendarEventList = await UpdateDocument(CalendarEventModel, event.id, update)
-	const events = eventListFilterSort(calendarEventList)
+	const events = eventListFilterFormatSort(calendarEventList)
 
 	res.json({ list: events })
 }
@@ -44,7 +44,7 @@ export const DeleteCalendarEvent = async (req: Request, res: Response) => {
 
 	const { id } = req.body
 	const calendarEventList = await DeleteDocument(CalendarEventModel, id)
-	const events = eventListFilterSort(calendarEventList)
+	const events = eventListFilterFormatSort(calendarEventList)
 
 	res.json({ list: events })
 }
