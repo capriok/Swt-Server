@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { GroceryModel } from '../Models/Grocery'
-import { FindDocument, CreateDocument, DeleteDocument, ClearDocuments } from '../Database/Queries'
+import { FindDocument, CreateDocument, UpdateDocument, DeleteManyDocuments } from '../Database/Queries'
 import { sortByName } from '../Functions/Data'
 
 export const GetGroceryList = async (req: Request, res: Response) => {
@@ -21,19 +21,29 @@ export const PostGrocery = async (req: Request, res: Response) => {
 
 	res.json({ list: sortedGroceryList })
 }
-export const DeleteGrocery = async (req: Request, res: Response) => {
-	console.log('Request: Delete Grocery')
+export const UpdateGrocery = async (req: Request, res: Response) => {
+	console.log('Request: Update Grocery')
 
-	const { id } = req.body
-	const groceryList = await DeleteDocument(GroceryModel, id)
+	const { item } = req.body
+	console.log(item)
+	const groceryList = await UpdateDocument(GroceryModel, item.id, item)
 	const sortedGroceryList = sortByName(groceryList)
 
 	res.json({ list: sortedGroceryList })
 }
-export const ClearGroceryList = async (req: Request, res: Response) => {
-	console.log('Request: Clear Grocery List')
+export const DeleteCheckedGrocery = async (req: Request, res: Response) => {
+	console.log('Request: Delete Checked Grocery Items')
 
-	const groceryList = await ClearDocuments(GroceryModel)
+	const groceryList = await DeleteManyDocuments(GroceryModel, { checked: true })
+	const sortedGroceryList = sortByName(groceryList)
+
+	res.json({ list: sortedGroceryList })
+}
+
+export const DeleteAllGrocery = async (req: Request, res: Response) => {
+	console.log('Request: Delete All Grocery Items')
+
+	const groceryList = await DeleteManyDocuments(GroceryModel, {})
 	const sortedGroceryList = sortByName(groceryList)
 
 	res.json({ list: sortedGroceryList })

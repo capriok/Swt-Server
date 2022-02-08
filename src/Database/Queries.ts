@@ -24,8 +24,8 @@ export async function DeleteDocument(model, id): Promise<Array<typeof model>> {
 		.catch(err => { throw err })
 }
 
-export async function ClearDocuments(model): Promise<Array<typeof model>> {
-	return await model.deleteMany({})
+export async function DeleteManyDocuments(model, filter): Promise<Array<typeof model>> {
+	return await model.deleteMany(filter)
 		.then(async () => await FindDocument(model, {}))
 		.catch(err => { throw err })
 }
