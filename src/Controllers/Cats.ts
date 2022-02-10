@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { CatConfigModel } from '../Models/CatConfig'
+import { CatConfigModel } from '../Models/Cats'
 import { FindDocument, UpdateDocument } from '../Database/Queries'
 
 import * as Scheduler from '../Functions/Scheduler'

@@ -1,8 +1,8 @@
 import { Router as R } from 'express'
 
-import CalendarEventRouter from './CalendarEvent'
+import CalendarEventRouter from './Calendar'
 import GroceryRouter from './Grocery'
-import CatConfigRouter from './CatConfig'
+import CatConfigRouter from './Cats'
 import { Ping } from '../Controllers/Ping'
 
 export default function Router(router: R): R {

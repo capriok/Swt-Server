@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as CalendarEventController from '../Controllers/CalendarEvent'
+import * as CalendarEventController from '../Controllers/Calendar'
 
 export default function CalendarEventRouter(router: Router): void {
 	router.route('/ce')

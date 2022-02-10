@@ -16,4 +16,4 @@ class CalenderEvent {
 	public endTime?: string;
 }
 
-export const CalendarEventModel = getModelForClass(CalenderEvent);
+export const CalendarEventModel = getModelForClass(CalenderEvent)

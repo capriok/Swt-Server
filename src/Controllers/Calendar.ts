@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { CalendarEventModel } from '../Models/CalendarEvent'
+import { CalendarEventModel } from '../Models/Calendar'
 import { FindDocument, CreateDocument, UpdateDocument, DeleteDocument } from '../Database/Queries'
 import { eventListFilterFormatSort } from '../Functions/Data'
 

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as CatConfigController from '../Controllers/CatConfig'
+import * as CatConfigController from '../Controllers/Cats'
 
 export default function CatConfigRouter(router: Router): void {
 	router.route('/cs')

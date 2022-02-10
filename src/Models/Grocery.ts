@@ -8,4 +8,4 @@ class Grocery {
 	public checked!: boolean;
 }
 
-export const GroceryModel = getModelForClass(Grocery);
+export const GroceryModel = getModelForClass(Grocery)

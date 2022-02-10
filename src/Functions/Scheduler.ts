@@ -1,6 +1,6 @@
-import { startOfToday, isSameDay, compareAsc, addDays, subDays, differenceInDays } from 'date-fns'
+import { startOfToday, isSameDay, compareAsc, addDays, differenceInDays } from 'date-fns'
 import { UpdateDocument } from '../Database/Queries'
-import { CatConfigModel } from '../Models/CatConfig'
+import { CatConfigModel } from '../Models/Cats'
 
 type CatConfig = {
 	id?: string
@@ -42,7 +42,6 @@ export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 		}
 	})
 
-	// console.log(schedule);
 	return schedule
 }
 
@@ -56,13 +55,12 @@ async function CatFood(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 		const nextDay = addDays(lastFoodDay, Interval)
 		lastFoodDay = nextDay
 		const doc = { lastFoodDay: nextDay.toJSON() }
-		console.log('Updating CatConfigModel Lfd --------------------------');
+		console.log('Updating CatConfigModel Last Food Day');
 		await UpdateDocument(CatConfigModel, '6119628c4d3b6b515097dea6', doc)
 	}
 
 	const foodDays = MapDays(lastFoodDay, Interval)
 
-	// console.log(foodDays);
 	return foodDays
 }
 
@@ -76,13 +74,12 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 		const nextDay = addDays(lastWasteDay, Interval)
 		lastWasteDay = nextDay
 		const doc = { lastWasteDay: nextDay.toJSON() }
-		console.log('Updating CatConfigModel Lwd --------------------------');
+		console.log('Updating CatConfigModel Last Waste Day');
 		await UpdateDocument(CatConfigModel, '6119628c4d3b6b515097dea6', doc)
 	}
 
 	const wasteDays = MapDays(lastWasteDay, Interval)
 
-	// console.log(wasteDays);
 	return wasteDays
 }
 

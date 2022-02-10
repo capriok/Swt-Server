@@ -9,4 +9,4 @@ class CatConfig {
 
 }
 
-export const CatConfigModel = getModelForClass(CatConfig);
+export const CatConfigModel = getModelForClass(CatConfig)
