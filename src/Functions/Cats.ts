@@ -1,6 +1,7 @@
 import { startOfToday, isSameDay, compareAsc, addDays, differenceInDays } from 'date-fns'
 import { UpdateDocument } from '../Database/Queries'
 import { CatConfigModel } from '../Models/Cats'
+import { GenerateWeek, LastDayComaprison, MapDays, ServerDate } from './Common'
 
 type CatConfig = {
 	id?: string
@@ -12,11 +13,8 @@ type CatScheduleDay = {
 	is: boolean
 	progress: number
 }
-export const ServerDate: Date = startOfToday()
-ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
-console.log('ServerDate:', ServerDate);
 
-export async function Cats(cc: CatConfig): Promise<Array<CatScheduleDay>> {
+export async function CatsSchedules(cc: CatConfig): Promise<Array<CatScheduleDay>> {
 	const catSchedule = {
 		food: await CatFood(cc),
 		waste: await CatWaste(cc)
@@ -81,60 +79,4 @@ async function CatWaste(cd: CatConfig): Promise<Array<CatScheduleDay>> {
 	const wasteDays = MapDays(lastWasteDay, Interval)
 
 	return wasteDays
-}
-
-function GenerateWeek() {
-	let week = new Array()
-
-	Populate(ServerDate, 1)
-	return week
-
-	function Populate(s, n) {
-		if (n > 7) return
-		week.push(s)
-		Populate(addDays(s, 1), n + 1)
-	}
-}
-
-function LastDayComaprison(last, intv) {
-	const difInDays = Math.abs(differenceInDays(last, ServerDate))
-	return difInDays >= intv
-		? true
-		: false
-}
-
-function MapDays(last: Date, intv: number): Array<any> {
-	const days = new Array()
-
-	FindDays(last)
-
-	return [...new Map(days.map(d => [d.date, d])).values()]
-		.sort((a, b) => compareAsc(a.date, b.date))
-
-	function FindDays(l, temp = l, n = 14) {
-		if (n === 0) return
-
-		let isDay = true
-		let prog = 100
-		const dif = differenceInDays(l, temp)
-		const percent = Math.abs(dif) / intv * 100
-
-		if (dif !== 0) {
-			isDay = false
-			dif === -Math.abs(dif)
-				? prog = prog - percent
-				: prog = percent
-		}
-
-		const day = {
-			date: l,
-			is: isDay,
-			progress: Math.floor(prog)
-		}
-
-		if (isDay) temp = addDays(l, intv)
-
-		days.push(day)
-		FindDays(addDays(l, 1), temp, n - 1)
-	}
 }

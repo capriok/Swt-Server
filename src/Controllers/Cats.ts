@@ -2,16 +2,16 @@ import { Request, Response } from 'express'
 import { CatConfigModel } from '../Models/Cats'
 import { FindDocument, UpdateDocument } from '../Database/Queries'
 
-import * as Scheduler from '../Functions/Scheduler'
-import { findToday } from '../Functions/Data'
+import { CatsSchedules } from '../Functions/Cats'
+import { FindToday } from '../Functions/Common'
 
 export const GetCatSchedule = async (req: Request, res: Response) => {
 	console.log('Request: Cats Schedule')
 
 	const catConfig = await FindDocument(CatConfigModel, {}).then(res => { return res[0] })
-	const catSchedule = await Scheduler.Cats(catConfig)
+	const catSchedule = await CatsSchedules(catConfig)
 
-	res.json({ today: findToday(catSchedule) })
+	res.json({ today: FindToday(catSchedule) })
 }
 
 export const GetCatConfig = async (req: Request, res: Response) => {
