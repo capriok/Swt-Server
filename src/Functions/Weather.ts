@@ -16,10 +16,10 @@ if (isNight) tod = 'Tonight'
 // https://www.weatherapi.com/api-explorer.aspx
 
 export async function GetWeather() {
-	const BASEURL = `http://api.weatherapi.com/v1/forecast.json?`
+	const BASEURL = `https://api.weatherapi.com/v1/forecast.json?`
+	const KEY = `key=${process.env.WEATHER_KEY}`
 	const LOCATION = `&q=Gilbert`
 	const CONFIG = '&days=1&aqi=no&alerts=no'
-	const KEY = 'key=257f28c73e724f0a8e5190900221102'
 	const url = `${BASEURL}${KEY}${LOCATION}${CONFIG}`
 
 	const response = await fetch(url)

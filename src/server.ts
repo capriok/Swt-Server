@@ -17,7 +17,12 @@ server.listen(port, () => console.log(`Server running on port ${port}`))
 
 app.use(express.json())
 
-const origins = ['http://192.168.0.233:3000', 'http://localhost:3000', process.env.SWEETIE, '*']
+const origins = [
+	'http://192.168.0.233:3000',
+	'http://localhost:3000',
+	'https://sweetie.kylecaprio.dev',
+	'https://api.weatherapi.com'
+]
 app.use(cors(corsOptions(origins)), corsMiddleware)
 
 const router = express.Router()
