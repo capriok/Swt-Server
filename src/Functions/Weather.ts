@@ -26,7 +26,9 @@ export async function GetWeather() {
 	const res: any = await response.json()
 
 	const forecast = res.forecast.forecastday[0]
-	const hour = res.current
+	const hour = res.forecast.forecastday[0].hour.find(hour => {
+		return hour.time_epoch > res.location.localtime_epoch
+	})
 
 	const description = tod + ' is ' + hour.condition.text.toString()
 	const temperature = Math.floor(hour.temp_f).toString() + '°'
