@@ -6,7 +6,7 @@ import * as socketio from 'socket.io'
 import * as socket from './socket'
 import mongoose from './Database/Mongoose'
 import routes from './Routes/index'
-import { corsOptions, corsMiddleware } from './cors/cors'
+import { corsOptions, corsMiddleware } from './Cors/cors'
 
 const port = process.env.PORT || 9000
 
