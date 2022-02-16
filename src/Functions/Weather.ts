@@ -1,18 +1,5 @@
 import fetch from 'node-fetch'
 
-const ch = new Date().getHours()
-const isMorning = ch >= 4 && ch < 12
-const isAfternoon = ch >= 12
-const isEvening = ch >= 17
-const isNight = ch >= 22
-
-let tod = 'Tonight'
-
-if (isMorning) tod = 'This morning'
-if (isAfternoon) tod = 'This afternoon'
-if (isEvening) tod = 'This evening'
-if (isNight) tod = 'Tonight'
-
 // https://www.weatherapi.com/api-explorer.aspx
 
 export async function GetWeather() {
@@ -30,7 +17,7 @@ export async function GetWeather() {
 		return hour.time_epoch > res.location.localtime_epoch
 	})
 
-	const description = tod + ' is ' + hour.condition.text.toString()
+	const description = hour.condition.text.toString()
 	const temperature = Math.floor(hour.temp_f).toString() + '°'
 	const humidity = hour.humidity.toString() + ' %'
 	const rain = Math.ceil(hour.precip_in).toString() + ' %'
