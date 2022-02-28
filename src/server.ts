@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 import * as express from "express"
 import * as http from 'http'
 import * as cors from 'cors'

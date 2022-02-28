@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "sweetie-server",
   "version": "0.1.0",
   "description": "sweetie-server",
   "main": "dist/server.js",
