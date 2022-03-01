@@ -1,5 +1,5 @@
 import { compareAsc } from 'date-fns'
-import { tzDate } from './Time'
+import { TimezoneDate } from './Time'
 
 export function SortByDate(arr: Array<any>) {
 	return arr.sort((a, b) => compareAsc(new Date(a.date), new Date(b.date)))
@@ -7,7 +7,7 @@ export function SortByDate(arr: Array<any>) {
 
 export function FormatDates(arr: Array<any>) {
 	return arr.map((x: any) => {
-		x.date = tzDate(x.date)
+		x.date = TimezoneDate(x.date)
 		return x
 	})
 }

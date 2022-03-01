@@ -1,12 +1,15 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
 
-class CatConfig {
+class ScheduleConfig {
 	@prop({ type: String, required: true })
 	public lastFoodDay!: string;
 
 	@prop({ type: String, required: true })
 	public lastWasteDay!: string;
 
+	@prop({ type: String, required: true })
+	public lastFloorDay!: string;
+
 }
 
-export const CatConfigModel = getModelForClass(CatConfig)
+export const ScheduleModel = getModelForClass(ScheduleConfig)

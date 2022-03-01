@@ -1,42 +1,21 @@
 import { addDays, compareAsc, differenceInDays, startOfToday } from 'date-fns'
-import { tzZero } from './Time'
 
 export const ServerDate: Date = startOfToday()
 ServerDate.setMinutes(ServerDate.getMinutes() - ServerDate.getTimezoneOffset())
-console.log('ServerDate:', ServerDate);
+console.log('ServerDate:', ServerDate)
 
 export function SortByName(pl: Array<any>) {
 	return pl.sort((a, b) => a.name.localeCompare(b.name))
 }
 
-export function FindToday(days: Array<any>) {
-	return days.find((d) => {
-		return new Date(d.date).toLocaleDateString()
-			=== tzZero(startOfToday()).toLocaleDateString()
-	})
-}
-
-export function GenerateWeek() {
-	let week = new Array()
-
-	Populate(ServerDate, 1)
-	return week
-
-	function Populate(s, n) {
-		if (n > 7) return
-		week.push(s)
-		Populate(addDays(s, 1), n + 1)
-	}
-}
-
-export function LastDayComaprison(last, intv) {
+export function LastDayComaprison(last: Date, intv: number) {
 	const difInDays = Math.abs(differenceInDays(last, ServerDate))
 	return difInDays >= intv
 		? true
 		: false
 }
 
-export function MapDays(last: Date, intv: number): Array<any> {
+export function GenerateSchedule(last: Date, intv: number): Array<any> {
 	const days = new Array()
 
 	FindDays(last)
@@ -44,7 +23,7 @@ export function MapDays(last: Date, intv: number): Array<any> {
 	return [...new Map(days.map(d => [d.date, d])).values()]
 		.sort((a, b) => compareAsc(a.date, b.date))
 
-	function FindDays(l, temp = l, n = 14) {
+	function FindDays(l, temp = l, n = intv + 1) {
 		if (n === 0) return
 
 		let isDay = true
