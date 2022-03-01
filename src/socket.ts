@@ -6,23 +6,23 @@ export function initialize(io: any) {
 	io.on("connection", (socket: any) => {
 
 		socket.on('connected', ({ }) => {
-			console.log('Socket: Connected');
+			console.log(`Socket: Connected to ${swt}`)
 			socket.join(swt)
 		})
 
-		socket.on('ce-change', (ce) => {
-			console.log('Socket: Changed Calendar Events');
-			io.to(swt).emit('ce-update', ce)
+		socket.on('calendar-change', (data) => {
+			console.log('Socket: Changed Calendar Events')
+			io.to(swt).emit('calendar-update', data)
 		})
 
-		socket.on('gl-change', (gl) => {
-			console.log('Socket: Changed Grocery List');
-			io.to(swt).emit('gl-update', gl)
+		socket.on('grocery-change', (data) => {
+			console.log('Socket: Changed Grocery List')
+			io.to(swt).emit('grocery-update', data)
 		})
 
-		socket.on('cs-change', (cs) => {
-			console.log('Socket: Changed Cat Schedule');
-			io.to(swt).emit('cs-update', cs)
+		socket.on('schedule-change', (data) => {
+			console.log('Socket: Changed Schedules')
+			io.to(swt).emit('schedule-update', data)
 		})
 
 	})
