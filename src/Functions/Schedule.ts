@@ -19,7 +19,7 @@ export async function Schedules(sc: ScheduleConfig) {
 	const scheduleConfig = {
 		food: await UpdateConfig('lastFoodDay', sc.lastFoodDay, 2),
 		waste: await UpdateConfig('lastWasteDay', sc.lastWasteDay, 3),
-		floor: await UpdateConfig('lastFloorDay', sc.lastFloorDay, 5)
+		floor: await UpdateConfig('lastFloorDay', sc.lastFloorDay, 7)
 	}
 
 	const foodDayMatch = scheduleConfig.food.find((d) => isSameDay(d.date, ServerDate))
