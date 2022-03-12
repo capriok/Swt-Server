@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { CalendarEventModel } from '../Models/Calendar'
 import { FindDocument, CreateDocument, UpdateDocument, DeleteDocument } from '../Database/Queries'
-import { FilterBeforeCurrentMonth, FormatDates, SortByDate } from '../Functions/Calendar'
+import { GenerateCalendar, FilterBeforeCurrentMonth, FormatDates, SortByDate } from '../Functions/Calendar'
 
 function EventsFilterFormatSort(events) {
 	const filteredEvents = FilterBeforeCurrentMonth(events)
@@ -11,6 +11,15 @@ function EventsFilterFormatSort(events) {
 	return list
 }
 
+export const GetCalendarWithEvents = async (req: Request, res: Response) => {
+	console.log('Request: Calendar With Events')
+
+	const calendarEventList = await FindDocument(CalendarEventModel, {})
+	const events = EventsFilterFormatSort(calendarEventList)
+	const calendarWithEvents = GenerateCalendar(events)
+
+	res.json({ calendar: calendarWithEvents })
+}
 export const GetCalendarEventList = async (req: Request, res: Response) => {
 	console.log('Request: Calendar Event List')
 

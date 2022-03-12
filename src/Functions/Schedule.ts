@@ -1,7 +1,7 @@
-import { isSameDay, addDays } from 'date-fns'
+import { isSameDay, addDays, differenceInDays, compareAsc } from 'date-fns'
 import { FindDocument, UpdateDocument } from '../Database/Queries'
 import { ScheduleModel } from '../Models/Schedule'
-import { LastDayComaprison, GenerateSchedule, ServerDate } from './Common'
+import { ServerDate } from './Index'
 
 type ScheduleConfig = {
 	id?: string
@@ -41,7 +41,6 @@ export async function Schedules(sc: ScheduleConfig) {
 			progress: floorDayMatch.progress
 		}
 	}
-
 }
 
 async function UpdateConfig(type: string, config: string, interval: number): Promise<Array<ScheduleDay>> {
@@ -58,4 +57,47 @@ async function UpdateConfig(type: string, config: string, interval: number): Pro
 	}
 
 	return GenerateSchedule(lastDay, interval)
+}
+
+function LastDayComaprison(last: Date, intv: number) {
+	const difInDays = Math.abs(differenceInDays(last, ServerDate))
+	return difInDays >= intv
+		? true
+		: false
+}
+
+function GenerateSchedule(last: Date, intv: number): Array<any> {
+	const days = new Array()
+
+	FindDays(last)
+
+	return [...new Map(days.map(d => [d.date, d])).values()]
+		.sort((a, b) => compareAsc(a.date, b.date))
+
+	function FindDays(l, temp = l, n = intv + 1) {
+		if (n === 0) return
+
+		let isDay = true
+		let prog = 100
+		const dif = differenceInDays(l, temp)
+		const percent = Math.abs(dif) / intv * 100
+
+		if (dif !== 0) {
+			isDay = false
+			dif === -Math.abs(dif)
+				? prog = prog - percent
+				: prog = percent
+		}
+
+		const day = {
+			date: l,
+			is: isDay,
+			progress: Math.floor(prog)
+		}
+
+		if (isDay) temp = addDays(l, intv)
+
+		days.push(day)
+		FindDays(addDays(l, 1), temp, n - 1)
+	}
 }
