@@ -66,8 +66,8 @@ function LastDayComaprison(last: Date, intv: number) {
 		: false
 }
 
-function GenerateSchedule(last: Date, intv: number): Array<any> {
-	const days = new Array()
+function GenerateSchedule(last: Date, intv: number): Array<ScheduleDay> {
+	const days: Array<ScheduleDay> = new Array()
 
 	FindDays(last)
 
@@ -89,7 +89,7 @@ function GenerateSchedule(last: Date, intv: number): Array<any> {
 				: prog = percent
 		}
 
-		const day = {
+		const day: ScheduleDay = {
 			date: l,
 			is: isDay,
 			progress: Math.floor(prog)

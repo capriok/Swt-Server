@@ -44,15 +44,14 @@ export function FilterBeforeCurrentMonth(events) {
 	})
 }
 
-export function GenerateCalendar(ces: Array<CalendarEvent>) {
-	const days: CalendarDay[] = []
+export function GenerateCalendar(ces: Array<CalendarEvent>): Array<CalendarDay> {
+	const days: Array<CalendarDay> = new Array()
 	const day = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
 	const weekday = day.getDay()
 
 	MapDays(day)
 
 	function MapDays(day: Date, d = 0) {
-
 		const isToday = isSameDay(day, ServerDate)
 		const inPast = isBefore(day, ServerDate)
 
