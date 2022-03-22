@@ -1,8 +1,5 @@
 import { compareAsc, isBefore, isSameDay } from 'date-fns'
-import { FindDocument } from '../Database/Queries'
-import { ScheduleModel } from '../Models/Schedule'
 import { ServerDate } from './Index'
-import { WorkSchedules } from './Schedule'
 import { TimezoneDate } from './Time'
 
 interface CalendarDay {
@@ -43,40 +40,10 @@ export function FilterBeforeCurrentMonth(events) {
   })
 }
 
-export async function GenerateCalendar(ces: Array<CalendarEvent>): Promise<Array<CalendarDay>> {
+export function GenerateCalendar(ces: Array<CalendarEvent>): Array<CalendarDay> {
   const days: Array<CalendarDay> = new Array()
   const day = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
   const weekday = day.getDay()
-
-  const scheduleConfig = await FindDocument(ScheduleModel, {}).then((res) => {
-    return res[0]
-  })
-  const schedules = await WorkSchedules(scheduleConfig)
-
-  const mayoPaydays: Array<CalendarEvent> = schedules.mayo
-    .filter((pd) => pd.progress === 100)
-    .map((pd) => {
-      return {
-        _id: '',
-        name: 'Mayo Payday',
-        timed: false,
-        date: pd.date.toJSON(),
-        startTime: '',
-        endTime: '',
-      }
-    })
-  const ingallsPaydays: Array<CalendarEvent> = schedules.ingalls
-    .filter((pd) => pd.progress === 100)
-    .map((pd) => {
-      return {
-        _id: '',
-        name: 'Ingalls Payday',
-        timed: false,
-        date: pd.date.toJSON(),
-        startTime: '',
-        endTime: '',
-      }
-    })
 
   MapDays(day)
 
@@ -87,17 +54,12 @@ export async function GenerateCalendar(ces: Array<CalendarEvent>): Promise<Array
     d === 0 && weekday === 0
       ? day.setDate(day.getDate() - 7)
       : d === 0
-      ? day.setDate(day.getDate() + (d - weekday))
-      : day.setDate(day.getDate() + 1)
+        ? day.setDate(day.getDate() + (d - weekday))
+        : day.setDate(day.getDate() + 1)
 
     let dayEvents = ces.filter((ce) => {
       return isSameDay(new Date(ce.date), day)
     })
-
-    const mayoPayday = mayoPaydays.find((pd) => isSameDay(TimezoneDate(new Date(pd.date)), day))
-    const ingallsPayday = ingallsPaydays.find((pd) => isSameDay(TimezoneDate(new Date(pd.date)), day))
-    if (mayoPayday) dayEvents = [mayoPayday, ...dayEvents]
-    if (ingallsPayday) dayEvents = [ingallsPayday, ...dayEvents]
 
     const numberClassName = `number${isToday ? ' today' : ''}`
     const dayClassName = `day${inPast && !isToday ? ' blur' : ''}`

@@ -17,6 +17,7 @@ export const GetCalendarWithEvents = async (req: Request, res: Response) => {
 	const calendarEventList = await FindDocument(CalendarEventModel, {})
 	const events = EventsFilterFormatSort(calendarEventList)
 	const calendarWithEvents = GenerateCalendar(events)
+	console.log(calendarWithEvents);
 
 	res.json({ calendar: calendarWithEvents })
 }

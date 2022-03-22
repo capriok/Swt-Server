@@ -20,9 +20,9 @@ type ScheduleDay = {
 export async function HomeSchedules(sc: ScheduleConfig) {
 
 	const scheduleConfig = {
-		food: await GenerateConfigSchedule('lastFoodDay', sc.lastFoodDay, 2),
-		waste: await GenerateConfigSchedule('lastWasteDay', sc.lastWasteDay, 3),
-		floor: await GenerateConfigSchedule('lastFloorDay', sc.lastFloorDay, 7)
+		food: await GenerateHomeSchedule('lastFoodDay', sc.lastFoodDay, 2),
+		waste: await GenerateHomeSchedule('lastWasteDay', sc.lastWasteDay, 3),
+		floor: await GenerateHomeSchedule('lastFloorDay', sc.lastFloorDay, 7)
 	}
 
 	const foodDayMatch = scheduleConfig.food.find((d) => isSameDay(d.date, ServerDate))
@@ -46,16 +46,7 @@ export async function HomeSchedules(sc: ScheduleConfig) {
 	}
 }
 
-export async function WorkSchedules(sc: ScheduleConfig) {
-	const scheduleConfig = {
-		mayo: await GenerateConfigSchedule('mayoPayday', sc.mayoPayday, 14),
-		ingalls: await GenerateConfigSchedule('ingallsPayday', sc.ingallsPayday, 14),
-	}
-
-	return scheduleConfig
-}
-
-async function GenerateConfigSchedule(type: string, config: string, interval: number): Promise<Array<ScheduleDay>> {
+async function GenerateHomeSchedule(type: string, config: string, interval: number): Promise<Array<ScheduleDay>> {
 	const lastDay = new Date(config)
 	const shouldUpdate = LastDayComaprison(lastDay, interval)
 
@@ -74,7 +65,7 @@ function LastDayComaprison(last: Date, intv: number) {
 async function UpdateScheduleDocument(type: string, lastDay: Date, interval: number) {
 	const nextDay = addDays(lastDay, interval)
 	const doc = { [type]: nextDay.toJSON() }
-	console.log(`Updating ScheduleModel: ${type}`);
+	console.log(`Updating ScheduleModel: ${type}`)
 	const schedulesId = await FindDocument(ScheduleModel, {}).then(res => { return res[0]._id })
 	await UpdateDocument(ScheduleModel, schedulesId, doc)
 }
@@ -87,7 +78,7 @@ function GenerateSchedule(last: Date, intv: number): Array<ScheduleDay> {
 	return [...new Map(days.map(d => [d.date, d])).values()]
 		.sort((a, b) => compareAsc(a.date, b.date))
 
-	function FindDays(l, temp = l, n = intv * 4) {
+	function FindDays(l, temp = l, n = intv + 1) {
 		if (n === 0) return
 
 		let isDay = true

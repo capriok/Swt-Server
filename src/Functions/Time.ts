@@ -7,5 +7,5 @@ export function TimezoneZero(date: any) {
 export function TimezoneDate(date: any) {
 	const d = new Date(date)
 	d.setMinutes(d.getMinutes() + 420)
-	return d.toJSON()
+	return d
 }

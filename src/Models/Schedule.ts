@@ -9,12 +9,6 @@ class ScheduleConfig {
 
   @prop({ type: String, required: true })
   public lastFloorDay!: string
-
-  @prop({ type: String, required: true })
-  public mayoPayday!: string
-
-  @prop({ type: String, required: true })
-  public ingallsPayday!: string
 }
 
 export const ScheduleModel = getModelForClass(ScheduleConfig)
