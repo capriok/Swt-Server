@@ -17,13 +17,15 @@ export async function GetWeather() {
 	const currentHour = res.forecast.forecastday[0].hour.find(hour => {
 		return hour.time_epoch > res.location.localtime_epoch
 	})
-	const dayHours = res.forecast.forecastday[0].hour.filter(hour => {
-		const time = parseInt(format(parseISO(hour.time), 'k'))
-		return (time >= 6 && time <= 22) && time % 2 === 0
-	}).map(hour => ({
-		time: format(parseISO(hour.time), 'h a'),
-		temp: Math.ceil(hour.temp_f) + '°'
-	}))
+	const dayHours = res.forecast.forecastday[0].hour
+		.filter(hour => {
+			const time = parseInt(format(parseISO(hour.time), 'k'))
+			return time >= 6 && time <= 22 && time % 2 === 0
+		})
+		.map(hour => ({
+			time: format(parseISO(hour.time), 'h a'),
+			temp: Math.ceil(hour.temp_f) + '°'
+		}))
 
 	const temperature = Math.floor(currentHour.temp_f).toString() + '°'
 	const rain = Math.ceil(currentHour.precip_in).toString() + ' %'
@@ -42,10 +44,4 @@ export async function GetWeather() {
 		},
 		hours: dayHours
 	}
-}
-
-function TrimLeadingZero(timeString: string) {
-	const splitTime = timeString.split(':')
-
-	return `${parseInt(splitTime[0])}:${splitTime[1]}`
 }

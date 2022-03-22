@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 import { ScheduleModel } from '../Models/Schedule'
 import { FindDocument, UpdateDocument } from '../Database/Queries'
 
-import { Schedules } from '../Functions/Schedule'
+import { HomeSchedules } from '../Functions/Schedule'
 
 export const GetSchedules = async (req: Request, res: Response) => {
 	console.log('Request: Schedules')
 
 	const scheduleConfig = await FindDocument(ScheduleModel, {}).then(res => { return res[0] })
-	const schedules = await Schedules(scheduleConfig)
+	const schedules = await HomeSchedules(scheduleConfig)
 
 	res.json({ schedules: schedules })
 }

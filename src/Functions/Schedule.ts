@@ -8,6 +8,8 @@ type ScheduleConfig = {
 	lastFoodDay: string
 	lastWasteDay: string
 	lastFloorDay: string
+	mayoPayday: string
+	ingallsPayday: string
 }
 type ScheduleDay = {
 	date: Date
@@ -15,11 +17,12 @@ type ScheduleDay = {
 	progress: number
 }
 
-export async function Schedules(sc: ScheduleConfig) {
+export async function HomeSchedules(sc: ScheduleConfig) {
+
 	const scheduleConfig = {
-		food: await UpdateConfig('lastFoodDay', sc.lastFoodDay, 2),
-		waste: await UpdateConfig('lastWasteDay', sc.lastWasteDay, 3),
-		floor: await UpdateConfig('lastFloorDay', sc.lastFloorDay, 7)
+		food: await GenerateConfigSchedule('lastFoodDay', sc.lastFoodDay, 2),
+		waste: await GenerateConfigSchedule('lastWasteDay', sc.lastWasteDay, 3),
+		floor: await GenerateConfigSchedule('lastFloorDay', sc.lastFloorDay, 7)
 	}
 
 	const foodDayMatch = scheduleConfig.food.find((d) => isSameDay(d.date, ServerDate))
@@ -43,18 +46,20 @@ export async function Schedules(sc: ScheduleConfig) {
 	}
 }
 
-async function UpdateConfig(type: string, config: string, interval: number): Promise<Array<ScheduleDay>> {
-	let lastDay = new Date(config)
+export async function WorkSchedules(sc: ScheduleConfig) {
+	const scheduleConfig = {
+		mayo: await GenerateConfigSchedule('mayoPayday', sc.mayoPayday, 14),
+		ingalls: await GenerateConfigSchedule('ingallsPayday', sc.ingallsPayday, 14),
+	}
+
+	return scheduleConfig
+}
+
+async function GenerateConfigSchedule(type: string, config: string, interval: number): Promise<Array<ScheduleDay>> {
+	const lastDay = new Date(config)
 	const shouldUpdate = LastDayComaprison(lastDay, interval)
 
-	if (shouldUpdate) {
-		const nextDay = addDays(lastDay, interval)
-		lastDay = nextDay
-		const doc = { [type]: nextDay.toJSON() }
-		console.log(`Updating ScheduleModel: ${type}`);
-		const schedulesId = await FindDocument(ScheduleModel, {}).then(res => { return res[0]._id })
-		await UpdateDocument(ScheduleModel, schedulesId, doc)
-	}
+	if (shouldUpdate) await UpdateScheduleDocument(type, lastDay, interval)
 
 	return GenerateSchedule(lastDay, interval)
 }
@@ -66,6 +71,14 @@ function LastDayComaprison(last: Date, intv: number) {
 		: false
 }
 
+async function UpdateScheduleDocument(type: string, lastDay: Date, interval: number) {
+	const nextDay = addDays(lastDay, interval)
+	const doc = { [type]: nextDay.toJSON() }
+	console.log(`Updating ScheduleModel: ${type}`);
+	const schedulesId = await FindDocument(ScheduleModel, {}).then(res => { return res[0]._id })
+	await UpdateDocument(ScheduleModel, schedulesId, doc)
+}
+
 function GenerateSchedule(last: Date, intv: number): Array<ScheduleDay> {
 	const days: Array<ScheduleDay> = new Array()
 
@@ -74,7 +87,7 @@ function GenerateSchedule(last: Date, intv: number): Array<ScheduleDay> {
 	return [...new Map(days.map(d => [d.date, d])).values()]
 		.sort((a, b) => compareAsc(a.date, b.date))
 
-	function FindDays(l, temp = l, n = intv + 1) {
+	function FindDays(l, temp = l, n = intv * 4) {
 		if (n === 0) return
 
 		let isDay = true
