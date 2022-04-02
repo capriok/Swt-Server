@@ -63,8 +63,6 @@ export function GenerateCalendar(
     const isToday = isSameDay(TimezoneZero(day), ServerDate);
     const inPast = isBefore(TimezoneZero(day), ServerDate);
 
-    console.log(TimezoneZero(day), ServerDate, isToday);
-
     let dayEvents = ces.filter((ce) => {
       return isSameDay(new Date(ce.date), day);
     });
